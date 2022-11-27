@@ -20,4 +20,4 @@ RCST Protocol Requests
 
 'STREAM' -> Render a specific media file from a server
 
-![alt text](https://github.com/jduhking/ce4390-project/blob/main/RCST protocol prototype.png?raw=true)
+![alt text](https://github.com/jduhking/ce4390-project/blob/main/RCST%20protocol%20prototype.png?raw=true)
