@@ -8,8 +8,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.listen()
     conn, addr = s.accept()
     with conn:
-        print('Connected by', addr)
+        print(f"Connection to {addr} established")
         while True:
+
             data = conn.recv(1024)
             if data:
                 print("Data received is:", repr(data))
