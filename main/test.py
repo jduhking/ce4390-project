@@ -1,4 +1,10 @@
-x = 2
-y = 5
+from mininet.net import Mininet
+from mininet.topo import LinearTopo
 
-print(f"Hello World, {x} + {y} is equal to {x + y}")
+Linear = LinearTopo(k=3)
+
+net = Mininet(topo=Linear)
+
+net.start()
+net.pingAll()
+net.stop()
