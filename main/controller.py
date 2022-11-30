@@ -18,7 +18,7 @@ from rcst_protocol_util import *
 
 # important variables
 
-server_host = '127.0.0.1'  # IP of the server
+server_host = '10.0.0.2'  # IP of the server
 server_port = 5000  # server port
 
 # controller functions
