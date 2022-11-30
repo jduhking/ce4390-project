@@ -30,10 +30,11 @@ def getInput():  # get user input and send a request based on that input
                    "1) Get list of media files from the server"
                    "2) Open the file. \n"
                    "3) Close. \n")
-
-    while True:  # block until user has entered a value
-        try:  # enter the value
-            userInput = int()
+    '''
+        while True:  # block until user has entered a value
+    try:  # enter the value
+        userInput = int()
+    '''
 
 
 # wait for user input and send requests based on that
