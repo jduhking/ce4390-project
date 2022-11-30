@@ -8,6 +8,8 @@ from rcst_protocol_util import *
 
 request = {'messageType': 'RETRIEVE'}
 
-pyDict = json_load_bytes(request)
+request = json.dumps(request)
 
-print(pyDict['messageType'])
+stringJSON = json.dumps(request)
+
+print(json_loads_bytes(stringJSON))
