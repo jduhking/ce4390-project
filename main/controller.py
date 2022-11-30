@@ -40,6 +40,7 @@ def getInput():  # get user input and send a request based on that input
 # wait for user input and send requests based on that
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((server_host, server_port))
+
     s.sendall(b'Hello!, world')
     data = s.recv(256)
 

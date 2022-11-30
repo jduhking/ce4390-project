@@ -1,14 +1,15 @@
 import socket
 
 server_host = '127.0.0.1'
-server_port = 3333
+server_port = 5000
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((server_host, server_port))
     s.listen()
     conn, addr = s.accept()
     with conn:
-        print(f"Connection to {addr} established")
+        print("Connected to addr={0} \n Listening on port x={1}".format(
+            addr, server_port))
         while True:
 
             data = conn.recv(1024)
