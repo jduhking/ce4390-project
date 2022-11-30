@@ -11,6 +11,26 @@ class messageTypes:
     CLOSE = 3
     RESPONSE = 4
 
+# function to convert json data into dictionary
+
+
+def json_load_bytes(fileName):
+
+    return convertToBytes(
+
+        json.load(fileName, object_hook=convertToBytes),
+        ignoreDictionary=True
+    )
+
+# if the data is in the form of a JSON string the convert it to a dictionary
+
+
+def json_loads_bytes(json_text):
+
+    return convertToBytes(
+        json.loads(json_text), object_hook=convertToBytes
+
+    )
 
 # function to convert the data into bytes
 
