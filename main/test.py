@@ -10,4 +10,4 @@ request = {'messageType': 'RETRIEVE'}
 
 pyDict = json_load_bytes(request)
 
-print(pyDict["messageType"])
+print(pyDict['messageType'])
