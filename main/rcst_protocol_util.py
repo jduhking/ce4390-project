@@ -28,8 +28,8 @@ def json_load_bytes(fileName):
 def json_loads_bytes(json_text):
 
     return convertToBytes(
-        json.loads(json_text), object_hook=convertToBytes
-
+        json.loads(json_text, object_hook=convertToBytes),
+        ignoreDictionary=True
     )
 
 # function to convert the data into bytes
