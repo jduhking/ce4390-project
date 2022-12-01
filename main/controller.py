@@ -22,7 +22,7 @@ from rcst_protocol_util import *
 def getInput():  # get user input and send a request based on that input
 
     menuOptions = ("Welcome to the controller interface: Select an option\n"
-                   "1) Get list of media files from the server"
+                   "1) Get list of media files from the server \n"
                    "2) Open the file. \n"
                    "3) Close. \n")
 
@@ -48,7 +48,7 @@ def RetrieveFiles(folderName):
     # Create RCST request message for getting the list of files
 
     request = json.dumps({"MessageType": MessageType.RETRIEVE,
-                         "ResourceName": str(folderName), "ServerIP": "127.0.0.1", "RCSTVersion": "1.0"})
+                         "ResourceName": str(folderName), "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0"})
     request = request.encode('utf-8')
     # Create socket
 
