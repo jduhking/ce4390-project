@@ -3,7 +3,19 @@
 import json
 
 
-class messageTypes:
+class NodeAddresses:
+    controllerIP = "127.0.0.1"
+    serverIP = "127.0.0.1"
+    rendererIP = "127.0.0.1"
+
+
+class NodePorts:
+    serverPort = 5000
+    rendererPort = 3000
+    controllerPort = 2000
+
+
+class MessageType:
 
     RETRIEVE = 0
     RENDER = 1
@@ -35,28 +47,26 @@ def json_loads_bytes(json_text):
 # function to convert the data into bytes
 
 
-def convertToBytes(payload, ignoreDictionary=False):
+def convertToBytes(message, ignoreDictionary=False):
 
     # This function converts our data into bytes to sent over network
 
-    if isinstance(payload, str):  # return a single bytified value
-        print("encoding a single value")
-        return payload.encode('utf-8')
+    if isinstance(message, str):  # return a single bytified value
 
-    if isinstance(payload, list):  # if it is a list of values return a list of bytified value
-        print("encoding a list")
-        return [convertToBytes(data, ignoreDictionary=True) for data in payload]
+        return message.encode('utf-8')
+
+    if isinstance(message, list):  # if it is a list of values return a list of bytified value
+
+        return [convertToBytes(data, ignoreDictionary=True) for data in message]
     # if the data is a dictionary return a dictionary of bytified key and value pairs
 
-    if isinstance(payload, dict) and not ignoreDictionary:
+    if isinstance(message, dict) and not ignoreDictionary:
 
-        print("encoding a dictionary")
         return {
-
-            convertToBytes(key, ignoreDictionary=True): convertToBytes(value, ignoreDictionary)
-            for key, value in payload.items()
+            convertToBytes(key, ignoreDictionary=True): convertToBytes(value, ignoreDictionary=True)
+            for key, value in message.items()
         }
 
     # spit the unchanged data back if it is not applicable
 
-    return payload
+    return message
