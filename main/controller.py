@@ -44,11 +44,11 @@ def getInput():  # get user input and send a request based on that input
 # Send a request to the server to retreive a list of media files located on the server
 
 
-def RetrieveFiles():
+def RetrieveFiles(folderName):
     # Create RCST request message for getting the list of files
 
     request = json.dumps({"MessageType": MessageType.RETRIEVE,
-                         "ResourceName": "mediaFiles", "ServerIP": "10.0.0.1", "RCSTVersion": "1.0"})
+                         "ResourceName": "mediaFiles", "ServerIP": "127.0.0.1", "RCSTVersion": "1.0"})
     request = request.encode('utf-8')
     # Create socket
 
@@ -91,7 +91,9 @@ while controllerInput != 3:
     controllerInput = getInput()
 
     if controllerInput == 1:  # Get the list of media files
-        RetrieveFiles()
+        # prompt the user to enter directory name
+        folderName = input("Enter in the name of the folder: ")
+        RetrieveFiles(folderName)
 
     elif controllerInput == 3:
         sys.exit()
