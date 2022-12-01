@@ -17,11 +17,6 @@ import sys
 import rcst_protocol_util
 from rcst_protocol_util import *
 
-# get the path of the folder holding the media files
-
-mediaFolder = os.path.normpath("files")
-server_host = '127.0.0.1'
-server_port = 5000
 # server functions
 
 # this function starts the server and listens for requests
@@ -85,23 +80,28 @@ def startListening():
 
             message = json.loads(message)
 
-            print(message)
-
             # capture request type
 
             messageType = message['MessageType']
-
-            print(messageType)
 
             # capture the fileName
 
             resourceName = message['ResourceName']
 
-            print(resourceName)
-
             if messageType == MessageType.RETRIEVE:
 
-                print("Retrieve a list")
+                # retrieve the list of files
+
+                fileList = retrieveList(resourceName)
+
+                # Generate the response message which takes the form of
+
+                # { "MessageType" : "RESPONSE", "ServerIP" : < val >, "RCSTVersion" : "1.0"  }
+                # And comes attached with a payload
+
+                payload = json.dumps({"payload": fileList})
+
+                conn.sendall(payload)
 
             elif messageType == MessageType.RENDER:
 
@@ -132,6 +132,26 @@ def startListening():
     # close server socket
 
     serverSocket.close()
+
+# this function retrieves a list of media files in a given directory
+
+
+def retrieveList(folderName):
+
+    # get the path of the folder holding the media files
+
+    path = os.path.normpath(folderName)
+
+    # get the list of files in a folder
+
+    fileList = [f for f in listdir(
+        path) if isfile(join(path, f))]
+
+    # sort the files in ascending order
+
+    fileList.sort()
+
+    return fileList
 
 
 startListening()

@@ -16,11 +16,6 @@ from rcst_protocol_util import *
 
 '''
 
-# important variables
-
-server_host = '127.0.0.1'  # IP of the server
-server_port = 5000  # server port
-
 # controller functions
 
 
@@ -53,7 +48,7 @@ def RetrieveFiles():
     # Create RCST request message for getting the list of files
 
     request = json.dumps({"MessageType": MessageType.RETRIEVE,
-                         "ResourceName": "mediaFiles", "ServerIP": "127.0.0.1", "RCSTVersion": "1.0"})
+                         "ResourceName": "mediaFiles", "ServerIP": "10.0.0.1", "RCSTVersion": "1.0"})
     request = request.encode('utf-8')
     # Create socket
 
@@ -67,13 +62,25 @@ def RetrieveFiles():
 
     controllerSocket.sendall(request)
 
-# close the socket
+    # await the response and store it
+
+    response = controllerSocket.recv(1024)
+
+    # close the socket
 
     controllerSocket.close()
 
-# Run the controller functions
+    # Run the controller functions
 
-# get the input and then perform a function depending on the value
+    # get the input and then perform a function depending on the value
+
+    # Get the data, convert back into python dictionary
+
+    response = response.decode('utf-8')
+
+    response = json.loads('utf-8')
+
+    print(response['payload'])
 
 
 controllerInput = int
