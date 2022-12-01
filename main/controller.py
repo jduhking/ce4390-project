@@ -76,11 +76,14 @@ def RetrieveFiles():
 
     # Get the data, convert back into python dictionary
 
-    response = response.decode('utf-8')
+    response = json_loads_bytes(response)
 
-    response = json.loads('utf-8')
+    print(response)
 
-    print(response['payload'])
+    outputtedList = response['payload']
+
+    for file in outputtedList:
+        print(file)
 
 
 controllerInput = int
