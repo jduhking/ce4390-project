@@ -77,10 +77,9 @@ def RetrieveFiles():
     # Get the data, convert back into python dictionary
 
     response = json_loads_bytes(response)
-
-    print(response)
-
     outputtedList = response['payload']
+
+    # Display the list of files
 
     for file in outputtedList:
         print(file)
