@@ -38,7 +38,8 @@ def startListening():
         # Try to bind
 
         try:
-            serverSocket.bind((server_host, server_port))
+            serverSocket.bind(
+                (NodeAddresses.controllerIP, NodePorts.controllerPort))
             print("Socket bind is successful..")
         except socket.error as msg:
 
@@ -49,7 +50,7 @@ def startListening():
 
         serverSocket.listen(2)
 
-        print("Server listening on port " + str(server_port))
+        print("Server listening on port " + str(NodePorts.controllerPort))
 
         # Turn the server on
 
@@ -63,7 +64,7 @@ def startListening():
 
             with conn:
                 print("Connected to {0} \nListening on port {1}".format(
-                    str(addr), str(server_port)))
+                    str(addr), str(NodePorts.serverPort)))
 
                 try:
 
