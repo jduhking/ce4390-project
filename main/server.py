@@ -37,7 +37,7 @@ def startListening():
     try:
         serverSocket.bind(
             (NodeAddresses.serverIP, NodePorts.serverPort))
-        print("Socket bind is successful..")
+        print("Socket bind was successful..")
     except socket.error as msg:
 
         print("Bind was uncessful. Error: " + str(msg))
@@ -47,7 +47,7 @@ def startListening():
 
     serverSocket.listen(2)
 
-    print("Server listening on port " + str(NodePorts.controllerPort))
+    print("Server listening on port " + str(NodePorts.serverPort))
 
     # Turn the server on
 
@@ -137,6 +137,19 @@ def startListening():
             elif messageType == MessageType.CLOSE:
 
                 print("Server is shutting down")
+                # send success message back to controller
+
+                response = json.dumps(
+                    {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "200 SUCCESS",
+                     "payload": "The server is shutting down..."}
+                )
+
+                response = response.encode('utf-8')
+
+                print(response)
+
+                conn.sendall(response)
+
                 serverIsOn = False
 
         except IOError as err:

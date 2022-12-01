@@ -98,14 +98,47 @@ def RetrieveFiles(folderName):
 
 # send a request to the server and renderer to shut down, shut down only after BOTH server and renderer have shut down
 
+# Shuts down the server, and renderer
+
 
 def Shutdown():
 
-    print("HELLO world")
+    request = json.dumps({"MessageType": MessageType.CLOSE,
+                         "ResourceName": "Server", "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0"})
+    request = request.encode('utf-8')
+    # Create socket
 
-    var = True
+    controllerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        # Connect to server socket
 
-    return var
+        controllerSocket.connect(
+            (NodeAddresses.serverIP, NodePorts.serverPort))
+
+        # send request to server
+
+        controllerSocket.sendall(request)
+
+        # await the response and store it
+
+        response = controllerSocket.recv(1024)
+        response = response.decode('utf-8')
+
+        response = json.loads(response)
+
+        # close the socket
+
+        controllerSocket.close()
+
+        if response["status"] == "200 SUCCESS":
+            print(response["status"])
+            print(response["payload"])
+            return True
+
+    except Exception as e:
+        print("Oops some error happened: " + str(e))
+
+    return False
 
 
 controllerInput = int
@@ -123,6 +156,7 @@ while controllerInput != 3:
         shutdown = Shutdown()
 
         if shutdown is True:
+            print("The controller is shutting down...")
             sys.exit()
         else:
-            print("Oops! An error occured in the process of shutting down \n")
+            print("The controller could not be shut down\n")
