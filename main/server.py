@@ -100,6 +100,8 @@ def startListening():
                 # And comes attached with a payload
 
                 payload = json.dumps({"payload": fileList})
+                payload = payload.encode('utf-8')
+                print(payload)
 
                 conn.sendall(payload)
 

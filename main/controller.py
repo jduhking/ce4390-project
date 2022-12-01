@@ -76,8 +76,9 @@ def RetrieveFiles(folderName):
 
     # Get the data, convert back into python dictionary
 
-    response = json_loads_bytes(response)
-    outputtedList = response['payload']
+    response = response.decode('utf-8')
+    response = json.loads(response)
+    outputtedList = response["payload"]
 
     # Display the list of files
 
