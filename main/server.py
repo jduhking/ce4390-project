@@ -91,19 +91,36 @@ def startListening():
             if messageType == MessageType.RETRIEVE:
 
                 # retrieve the list of files
+                try:
 
-                fileList = retrieveList(resourceName)
+                    fileList = retrieveList(resourceName)
 
-                # Generate the response message which takes the form of
+                    # Generate the response message which takes the form of
 
-                # { "MessageType" : "RESPONSE", "ServerIP" : < val >, "RCSTVersion" : "1.0"  }
-                # And comes attached with a payload
+                    # { "MessageType" : "RESPONSE", "ServerIP" : < val >, "RCSTVersion" : "1.0", "payload" : <any>  }
+                    # And comes attached with a payload
 
-                payload = json.dumps({"payload": fileList})
-                payload = payload.encode('utf-8')
-                print(payload)
+                    response = json.dumps({"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "200 SUCCESS",
+                                           "payload": fileList})
+                    response = response.encode('utf-8')
 
-                conn.sendall(payload)
+                    print(response)
+
+                    conn.sendall(response)
+
+                except OSError as osErr:  # If file not found send an error response
+
+                    errorResponse = json.dumps(
+                        {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "404 CANT FIND",
+                         "payload": str(osErr)}
+                    )
+
+                    print(errorResponse)
+
+                    errorResponse = errorResponse.encode(
+                        'utf-8')  # encode into bytes
+
+                    conn.sendall(errorResponse)
 
             elif messageType == MessageType.RENDER:
 

@@ -29,7 +29,7 @@ def getInput():  # get user input and send a request based on that input
     while True:  # block until user has entered a value
         try:  # enter the value
             userInput = int(
-                input(menuOptions + "\n" + "Please select an option"))
+                input(menuOptions + "\n" + "Please select an option: "))
         except ValueError:
             print("Wrong Input, try again")
             continue  # continually prompt for input until correct value is entered
@@ -48,7 +48,7 @@ def RetrieveFiles(folderName):
     # Create RCST request message for getting the list of files
 
     request = json.dumps({"MessageType": MessageType.RETRIEVE,
-                         "ResourceName": "mediaFiles", "ServerIP": "127.0.0.1", "RCSTVersion": "1.0"})
+                         "ResourceName": str(folderName), "ServerIP": "127.0.0.1", "RCSTVersion": "1.0"})
     request = request.encode('utf-8')
     # Create socket
 
@@ -78,12 +78,34 @@ def RetrieveFiles(folderName):
 
     response = response.decode('utf-8')
     response = json.loads(response)
-    outputtedList = response["payload"]
 
-    # Display the list of files
+    if response["status"] == "404 CANT FIND":
 
-    for file in outputtedList:
-        print(file)
+        # check if the response is an error response, if so output the status of the response and the error msg
+
+        print(response["status"])
+        print(response["payload"])
+
+    else:
+        # if not Display the list of files and the status
+
+        print(response["status"])
+
+        outputtedList = response["payload"]
+
+        for file in outputtedList:
+            print(file)
+
+# send a request to the server and renderer to shut down, shut down only after BOTH server and renderer have shut down
+
+
+def Shutdown():
+
+    print("HELLO world")
+
+    var = True
+
+    return var
 
 
 controllerInput = int
@@ -97,4 +119,10 @@ while controllerInput != 3:
         RetrieveFiles(folderName)
 
     elif controllerInput == 3:
-        sys.exit()
+
+        shutdown = Shutdown()
+
+        if shutdown is True:
+            sys.exit()
+        else:
+            print("Oops! An error occured in the process of shutting down \n")
