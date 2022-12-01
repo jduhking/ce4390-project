@@ -39,7 +39,7 @@ def startListening():
 
         try:
             serverSocket.bind(
-                (NodeAddresses.controllerIP, NodePorts.controllerPort))
+                (NodeAddresses.serverIP, NodePorts.serverPort))
             print("Socket bind is successful..")
         except socket.error as msg:
 
