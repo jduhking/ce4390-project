@@ -29,7 +29,7 @@ def getInput():  # get user input and send a request based on that input
     while True:  # block until user has entered a value
         try:  # enter the value
             userInput = int(
-                input(menuOptions + "\n" + "Please select an option: "))
+                raw_input(menuOptions + "\n" + "Please select an option: "))
         except ValueError:
             print("Wrong Input, try again")
             continue  # continually prompt for input until correct value is entered
@@ -217,14 +217,15 @@ while controllerInput != 3:
 
     if controllerInput == 1:  # Get the list of media files
         # prompt the user to enter directory name
-        folderName = input("Enter in the name of the folder: ")
+        folderName = raw_input("Enter in the name of the folder: ")
         RetrieveFiles(folderName)
 
     elif controllerInput == 2:  # Send a render quest to the renderer
 
-        resourcePath = input(
+        resourcePath = raw_input(
             "Enter the path of the resource you want to render: ")
-        resource = input("Enter the name of the resource you want to render: ")
+        resource = raw_input(
+            "Enter the name of the resource you want to render: ")
 
         Render(resourcePath, resource)
 

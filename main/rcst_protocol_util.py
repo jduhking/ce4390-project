@@ -4,9 +4,9 @@ import json
 
 
 class NodeAddresses:
-    controllerIP = "127.0.0.1"
-    serverIP = "127.0.0.1"
-    rendererIP = "127.0.0.1"
+    controllerIP = "10.0.0.1"
+    serverIP = "10.0.0.2"
+    rendererIP = "10.0.0.3"
 
 
 class NodePorts:
