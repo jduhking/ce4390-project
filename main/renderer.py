@@ -59,7 +59,7 @@ def startListening():
 
             # Expecting RENDER requests or Stream Responses from the controller and server respectively
             # Get the RCST request type, get the fileName and all useful information from request line
-            # { "MessageType": < val >, "ResourceName": < val >, "ServerIp" : <val>, "RCSTVersion": <val> }
+            # { "MessageType": < val >, "ResourceName": < val >, "ServerIp" : <val>, "Version": <val> }
 
             message = message.decode('utf-8')
 
@@ -82,7 +82,7 @@ def startListening():
 
                     # If resource found send 200 SUCCESS response to controller
 
-                    response = json.dumps({"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "200 SUCCESS",
+                    response = json.dumps({"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "200 SUCCESS",
                                            "payload": "The resource " + str(resourceName['resource']) + " has been rendered"})
                     response = response.encode('utf-8')
 
@@ -93,7 +93,7 @@ def startListening():
                 except Exception as err:  # If file not found send an error response
 
                     errorResponse = json.dumps(
-                        {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "500 CANNOT RENDER",
+                        {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "500 CANNOT RENDER",
                          "payload": "The resource could not be rendered: " + str(err)}
                     )
 
@@ -116,7 +116,7 @@ def startListening():
                 # Send a response to the controller notifying that the renderer shut down
 
                 response = json.dumps(
-                    {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "200 SUCCESS",
+                    {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "200 SUCCESS",
                      "payload": "The renderer is shutting down..."}
                 )
                 response = response.encode('utf-8')
