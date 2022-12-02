@@ -80,6 +80,8 @@ def startListening():
 
             message = json.loads(message)
 
+            print(message)
+
             # capture request type
 
             messageType = message['MessageType']
@@ -103,8 +105,6 @@ def startListening():
                     response = json.dumps({"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "200 SUCCESS",
                                            "payload": fileList})
                     response = response.encode('utf-8')
-
-                    print(response)
 
                     conn.sendall(response)
 
@@ -176,8 +176,6 @@ def startListening():
 
                 response = response.encode('utf-8')
 
-                print(response)
-
                 conn.sendall(response)
 
                 serverIsOn = False
@@ -226,7 +224,7 @@ def streamResource(resourceDirectory, resourceName):
     file = open(join(path, resourceName), "rb")
 
     payload = file.read()
-    print(payload)
+
     payload = payload.decode('utf-8')
     return payload
 

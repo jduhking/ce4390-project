@@ -79,6 +79,8 @@ def RetrieveFiles(folderName):
     response = response.decode('utf-8')
     response = json.loads(response)
 
+    print(response)
+
     if response["status"] == "404 CANT FIND":
 
         # check if the response is an error response, if so output the status of the response and the error msg
@@ -105,6 +107,8 @@ def Shutdown():
 
     request = json.dumps({"MessageType": MessageType.CLOSE,
                          "ResourceName": "Server", "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0"})
+
+    print(request)
     request = request.encode('utf-8')
     # Create socket
 
@@ -125,6 +129,7 @@ def Shutdown():
         response = response.decode('utf-8')
 
         response = json.loads(response)
+        print(response)
 
         # close the socket
 
@@ -139,6 +144,8 @@ def Shutdown():
             request = json.dumps({"MessageType": MessageType.CLOSE,
                                   "ResourceName": "Renderer", "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0"})
             request = request.encode('utf-8')
+
+            print(request)
             # Create socket
 
             controllerSocket = socket.socket(
@@ -203,8 +210,8 @@ def Render(resourcePath, resource):
 
     # print the response
 
-    print(response['status'])
-    print(response['payload'])
+    print(response)
+
     # close the socket
 
     controllerSocket.close()

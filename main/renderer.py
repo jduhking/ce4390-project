@@ -65,6 +65,8 @@ def startListening():
 
             message = json.loads(message)
 
+            print(message)
+
             # capture request type
 
             messageType = message['MessageType']
@@ -84,9 +86,8 @@ def startListening():
 
                     response = json.dumps({"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "200 SUCCESS",
                                            "payload": "The resource " + str(resourceName['resource']) + " has been rendered"})
-                    response = response.encode('utf-8')
-
                     print(response)
+                    response = response.encode('utf-8')
 
                     conn.sendall(response)
 
@@ -119,7 +120,10 @@ def startListening():
                     {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "200 SUCCESS",
                      "payload": "The renderer is shutting down..."}
                 )
+
+                print(response)
                 response = response.encode('utf-8')
+
                 # Create socket
 
                 controllerSocket = socket.socket(
@@ -163,7 +167,7 @@ def Stream(resource):
 
     print(str(request))
     request = request.encode('utf-8')
-    print(str(request))
+
     # Create socket
 
     try:
