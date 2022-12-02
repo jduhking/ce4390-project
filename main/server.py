@@ -128,7 +128,37 @@ def startListening():
 
             elif messageType == MessageType.STREAM:
 
-                print("Stream a media file")
+                print("STREAMING START")
+                print(resourceName)
+                # stream request gets passed a resource object containing the path and the name of the resource under the resourceName section
+
+                resourcePath = resourceName['resourcePath']
+                resource = resourceName['resource']
+
+                print("Attempting to retrieve " +
+                      str(resource) + " at " + str(resourcePath))
+
+                try:
+
+                    payload = streamResource(resourcePath, resource)
+
+                    response = json.dumps(
+                        {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "200 SUCCESS",
+                         "payload": payload})
+
+                    response = response.encode('utf-8')
+
+                    conn.sendall(response)
+
+                except OSError as e:
+
+                    errorResponse = json.dumps(
+                        {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "404 CANT FIND",
+                         "payload": "File / Directory could not be found"})
+
+                    errorResponse = errorResponse.encode('utf-8')
+
+                    conn.sendall(errorResponse)
 
             elif messageType == MessageType.RESPONSE:
 
@@ -184,6 +214,21 @@ def retrieveList(folderName):
     fileList.sort()
 
     return fileList
+
+
+def streamResource(resourceDirectory, resourceName):
+
+    # Get the path of the resource
+
+    path = os.path.normpath(resourceDirectory)
+
+    # Open file in read-binary
+    file = open(join(path, resourceName), "rb")
+
+    payload = file.read()
+    print(payload)
+    payload = payload.decode('utf-8')
+    return payload
 
 
 startListening()
