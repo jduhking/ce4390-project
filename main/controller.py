@@ -133,12 +133,81 @@ def Shutdown():
         if response["status"] == "200 SUCCESS":
             print(response["status"])
             print(response["payload"])
+
+            # Next shutdown the receiver
+
+            request = json.dumps({"MessageType": MessageType.CLOSE,
+                                  "ResourceName": "Renderer", "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0"})
+            request = request.encode('utf-8')
+            # Create socket
+
+            controllerSocket = socket.socket(
+                socket.AF_INET, socket.SOCK_STREAM)
+
+            try:
+                # Connect to server socket
+
+                controllerSocket.connect(
+                    (NodeAddresses.rendererIP, NodePorts.rendererPort))
+
+                # send request to server
+
+                controllerSocket.sendall(request)
+
+            except Exception as e:
+
+                print("Can't connect to the renderer")
+
             return True
 
     except Exception as e:
         print("Oops some error happened: " + str(e))
 
     return False
+
+
+def Render(resourcePath, resource):
+
+    print("Rendering " + str(resource) + " at " + str(resourcePath))
+
+    # Send render request ot the renderer
+
+    request = json.dumps(
+        {"MessageType": MessageType.RENDER,
+         "ResourceName": {"resourcePath": str(resourcePath), "resource": str(resource)}, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0"}
+    )
+
+    request = request.encode('utf-8')
+
+    print(request)
+
+    # Create socket
+
+    controllerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # Connect to server socket
+
+    controllerSocket.connect(
+        (NodeAddresses.rendererIP, NodePorts.rendererPort))
+
+    # send request to server
+
+    controllerSocket.sendall(request)
+
+    # await the response and store it
+
+    response = controllerSocket.recv(1024)
+    response = response.decode('utf-8')
+
+    response = json.loads(response)
+
+    # print the response
+
+    print(response['status'])
+    print(response['payload'])
+    # close the socket
+
+    controllerSocket.close()
 
 
 controllerInput = int
@@ -150,6 +219,14 @@ while controllerInput != 3:
         # prompt the user to enter directory name
         folderName = input("Enter in the name of the folder: ")
         RetrieveFiles(folderName)
+
+    elif controllerInput == 2:  # Send a render quest to the renderer
+
+        resourcePath = input(
+            "Enter the path of the resource you want to render: ")
+        resource = input("Enter the name of the resource you want to render: ")
+
+        Render(resourcePath, resource)
 
     elif controllerInput == 3:
 

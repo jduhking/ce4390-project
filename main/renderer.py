@@ -78,25 +78,23 @@ def startListening():
                 # If it is a render request, then initiate a stream request to the server
                 try:
 
-                    response = Stream(resourceName)
-
-                    # Render the response
+                    Stream(resourceName)
 
                     # If resource found send 200 SUCCESS response to controller
 
                     response = json.dumps({"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "200 SUCCESS",
-                                           "payload": resourceName + " has been rendered"})
+                                           "payload": "The resource " + str(resourceName['resource']) + " has been rendered"})
                     response = response.encode('utf-8')
 
                     print(response)
 
                     conn.sendall(response)
 
-                except OSError as osErr:  # If file not found send an error response
+                except Exception as err:  # If file not found send an error response
 
                     errorResponse = json.dumps(
-                        {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "404 CANT FIND",
-                         "payload": str(osErr)}
+                        {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "500 CANNOT RENDER",
+                         "payload": "The resource could not be rendered: " + str(err)}
                     )
 
                     print(errorResponse)
@@ -104,6 +102,7 @@ def startListening():
                     errorResponse = errorResponse.encode(
                         'utf-8')  # encode into bytes
 
+                    # Send error response to controller
                     conn.sendall(errorResponse)
 
             elif messageType == MessageType.RESPONSE:
@@ -113,6 +112,32 @@ def startListening():
             elif messageType == MessageType.CLOSE:
 
                 print("Renderer is shutting down")
+
+                # Send a response to the controller notifying that the renderer shut down
+
+                response = json.dumps(
+                    {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0", "status": "200 SUCCESS",
+                     "payload": "The renderer is shutting down..."}
+                )
+                response = response.encode('utf-8')
+                # Create socket
+
+                controllerSocket = socket.socket(
+                    socket.AF_INET, socket.SOCK_STREAM)
+
+                try:
+                    # Connect to server socket
+
+                    controllerSocket.connect(
+                        (NodeAddresses.controllerIP, NodePorts.controllerPort))
+
+                    # send request to server
+
+                    controllerSocket.sendall(response)
+                except Exception as e:
+
+                    print("Couldn't reach the controller")
+
                 serverIsOn = False
 
         except IOError as err:
@@ -130,9 +155,63 @@ def startListening():
 
 
 def Stream(resource):
-    print("Streaming " + resource)
 
-    return True
+    # Send request method to the server for streaming
+
+    request = json.dumps({"MessageType": MessageType.STREAM,
+                         "ResourceName": resource, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0"})
+
+    print(str(request))
+    request = request.encode('utf-8')
+    print(str(request))
+    # Create socket
+
+    try:
+
+        rendererSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        print("Establishing connection with server....\n")
+        # Connect to server socket
+
+        rendererSocket.connect(
+            (NodeAddresses.serverIP, NodePorts.serverPort))
+
+        print("Connected to server \n")
+        # send request to server
+
+        rendererSocket.sendall(request)
+
+        print("Sending stream request to server.... \n")
+
+        # The renderer has no buffer, so it just renders all that it receives
+
+        response = rendererSocket.recv(2048)
+
+        # Render the data
+
+        response = response.decode('utf-8')
+        response = json.loads(response)
+
+        if response["status"] == "200 SUCCESS":
+            # Render the media file onto the screen
+
+            print("Resource retrieved from the server....")
+            data = response["payload"]
+
+            print("Rendering the file... \n")
+            print(resource)
+            print("\n")
+            print(data)
+        else:
+
+            # check if the response is an error response, if so output the status of the response and the error msg
+
+            print(response["status"])
+            print(response["payload"])
+
+    except Exception as err:
+
+        print("There was an error: " + str(err))
 
 
 startListening()
