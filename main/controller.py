@@ -152,7 +152,7 @@ def Shutdown():
                 socket.AF_INET, socket.SOCK_STREAM)
 
             try:
-                # Connect to server socket
+                # Connect to renderer socket
 
                 controllerSocket.connect(
                     (NodeAddresses.rendererIP, NodePorts.rendererPort))
@@ -171,6 +171,8 @@ def Shutdown():
                 # close the socket
 
                 controllerSocket.close()
+
+                return True
 
             except Exception as e:
 
