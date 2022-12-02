@@ -5,6 +5,8 @@ Application Protocol for transmitting data over virtual network between a contro
 
 The purpose of this protocol is to allow a controller (C) to request (RETRIEVE) a list of media files from a server (S) and can request R to render the chosen file (RENDER). The receiver (R), upon receiving a request from the controller (C), sends a request to the server (S) who then streams (STREAM) the chosen media file to R for rendering. 
 
+Youtube link: https://youtu.be/A7DXYgTcADg
+
 LIMITATIONS:
 
 - R CANNOT BUFFER, Renders what it receives from S.
