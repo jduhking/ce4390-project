@@ -161,14 +161,25 @@ def Shutdown():
 
                 controllerSocket.sendall(request)
 
+                # await shutdown response from renderer
+
+                response = controllerSocket.recv(1024)
+                response = response.decode('utf-8')
+                response = json.loads(response)
+                print(response)
+
+                # close the socket
+
+                controllerSocket.close()
+
             except Exception as e:
 
                 print("Can't connect to the renderer")
 
-            return True
+                return False
 
     except Exception as e:
-        print("Oops some error happened: " + str(e))
+        print("Error occured while closing servers... " + str(e))
 
     return False
 

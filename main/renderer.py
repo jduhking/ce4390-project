@@ -91,7 +91,7 @@ def startListening():
 
                     conn.sendall(response)
 
-                except Exception as err:  # If file not found send an error response
+                except OSError as err:  # If file not found send an error response
 
                     errorResponse = json.dumps(
                         {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "500 CANNOT RENDER",
@@ -130,7 +130,7 @@ def startListening():
                     socket.AF_INET, socket.SOCK_STREAM)
 
                 try:
-                    # Connect to server socket
+                    # Connect to controller socket
 
                     controllerSocket.connect(
                         (NodeAddresses.controllerIP, NodePorts.controllerPort))
@@ -138,6 +138,7 @@ def startListening():
                     # send request to server
 
                     controllerSocket.sendall(response)
+
                 except Exception as e:
 
                     print("Couldn't reach the controller")
@@ -206,6 +207,8 @@ def Stream(resource):
             print(resource)
             print("\n")
             print(data)
+
+            return
         else:
 
             # check if the response is an error response, if so output the status of the response and the error msg
