@@ -143,7 +143,8 @@ def startListening():
 
                 except Exception as e:
 
-                    print("Couldn't reach the controller")
+                    print(
+                        "Couldn't reach the controller, there was an error: " + str(e))
 
                 serverIsOn = False
 
@@ -215,8 +216,7 @@ def Stream(resource):
 
             # check if the response is an error response, if so output the status of the response and the error msg
 
-            print(response["status"])
-            print(response["payload"])
+            print(response)
 
             return False
 

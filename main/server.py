@@ -217,15 +217,18 @@ def retrieveList(folderName):
 def streamResource(resourceDirectory, resourceName):
 
     # Get the path of the resource
+    try:
 
-    path = os.path.normpath(resourceDirectory)
+        path = os.path.normpath(resourceDirectory)
 
-    # Open file in read-binary
-    file = open(join(path, resourceName), "rb")
+        # Open file in read-binary
+        file = open(join(path, resourceName), "rb")
 
-    payload = file.read()
+        payload = file.read()
 
-    payload = payload.decode('utf-8')
+        payload = payload.decode('utf-8')
+    except OSError as e:
+        payload = "File / Directory does not exist"
     return payload
 
 
