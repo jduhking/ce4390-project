@@ -118,35 +118,29 @@ def startListening():
 
                 # Send a response to the controller notifying that the renderer shut down
 
-                response = json.dumps(
-                    {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "200 SUCCESS",
-                     "payload": "The renderer is shutting down..."}
-                )
-
-                print(response)
-                response = response.encode('utf-8')
-
                 # Create socket
-
-                controllerSocket = socket.socket(
-                    socket.AF_INET, socket.SOCK_STREAM)
 
                 try:
                     # Connect to controller socket
 
-                    controllerSocket.connect(
-                        (NodeAddresses.controllerIP, NodePorts.controllerPort))
+                    response = json.dumps(
+                        {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "200 SUCCESS",
+                         "payload": "The renderer is shutting down..."}
+                    )
+
+                    print(response)
+                    response = response.encode('utf-8')
 
                     # send request to server
 
-                    controllerSocket.sendall(response)
+                    conn.sendall(response)
 
                 except Exception as e:
 
                     print(
                         "Couldn't reach the controller, there was an error: " + str(e))
 
-                rendererIsOn = False
+            rendererIsOn = False
 
         except IOError as err:
 
