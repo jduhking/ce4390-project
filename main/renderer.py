@@ -93,7 +93,7 @@ def startListening():
 
                         conn.sendall(response)
 
-                except OSError as err:  # If file not found send an error response
+                except Exception as err:  # If file not found send an error response
 
                     errorResponse = json.dumps(
                         {"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "500 CANNOT RENDER",
@@ -218,11 +218,13 @@ def Stream(resource):
 
             print(response)
 
-            return False
+            raise
 
     except Exception as err:
 
         print("There was an error: " + str(err))
+
+        raise
 
 
 startListening()
