@@ -140,7 +140,7 @@ def startListening():
                     print(
                         "Couldn't reach the controller, there was an error: " + str(e))
 
-            rendererIsOn = False
+                rendererIsOn = False
 
         except IOError as err:
 
