@@ -80,16 +80,18 @@ def startListening():
                 # If it is a render request, then initiate a stream request to the server
                 try:
 
-                    Stream(resourceName)
+                    rendered = Stream(resourceName)
 
                     # If resource found send 200 SUCCESS response to controller
+                    if rendered is True:
 
-                    response = json.dumps({"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "200 SUCCESS",
-                                           "payload": "The resource " + str(resourceName['resource']) + " has been rendered"})
-                    print(response)
-                    response = response.encode('utf-8')
+                        response = json.dumps({"MessageType": MessageType.RESPONSE, "ServerIP": str(NodeAddresses.serverIP), "Version": "1.0", "status": "200 SUCCESS",
+                                               "payload": "The resource " + str(resourceName['resource']) + " has been rendered"})
+                        print(response)
 
-                    conn.sendall(response)
+                        response = response.encode('utf-8')
+
+                        conn.sendall(response)
 
                 except OSError as err:  # If file not found send an error response
 
@@ -208,13 +210,15 @@ def Stream(resource):
             print("\n")
             print(data)
 
-            return
+            return True
         else:
 
             # check if the response is an error response, if so output the status of the response and the error msg
 
             print(response["status"])
             print(response["payload"])
+
+            return False
 
     except Exception as err:
 

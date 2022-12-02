@@ -194,10 +194,8 @@ def Render(resourcePath, resource):
         {"MessageType": MessageType.RENDER,
          "ResourceName": {"resourcePath": str(resourcePath), "resource": str(resource)}, "ServerIP": str(NodeAddresses.serverIP), "RCSTVersion": "1.0"}
     )
-
-    request = request.encode('utf-8')
-
     print(request)
+    request = request.encode('utf-8')
 
     # Create socket
 
@@ -230,7 +228,7 @@ def Render(resourcePath, resource):
 
 controllerInput = int
 
-while controllerInput != 3:
+while True:
     controllerInput = getInput()
 
     if controllerInput == 1:  # Get the list of media files
